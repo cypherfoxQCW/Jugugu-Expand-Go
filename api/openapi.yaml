@@ -1,0 +1,567 @@
+openapi: 3.0.1
+info:
+  description: 接入jugugu区块链全包的全部接口，访问IP需要连续管理员，添加业务服务器IP
+  title: 扩展接入
+  version: 1.0.0
+servers:
+- url: /
+tags:
+- name: 扩展接入
+- name: 扩展接入/低耦合交互
+- name: 扩展接入/常规交互
+paths:
+  /UserNFTs:
+    post:
+      deprecated: false
+      description: 查询指定合约用户徽章持有ID和对应的数量。
+      parameters: []
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object'
+        content:
+          application/json:
+            example:
+              account: cfxtest:aar3g70v613nnkknsewa5902p0bxb6jcay1n4dgnxp
+              contract: cfxtest:acbk50byfusjyh7494rm8yd8xhnkdh9jyetgadzem4
+            schema:
+              properties:
+                account:
+                  title: 用户区块链地址
+                  type: string
+                contract:
+                  title: 智能合约区块链地址（这里传小红花的地址）
+                  type: string
+              required:
+              - account
+              - contract
+              type: object
+              x-apifox-orders:
+              - account
+              - contract
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                "1":
+                  summary: 成功示例
+                  value:
+                    contract: cfxtest:acbk50byfusjyh7494rm8yd8xhnkdh9jyetgadzem4
+                    account: cfxtest:aar3g70v613nnkknsewa5902p0bxb6jcay1n4dgnxp
+                    nfts:
+                    - id: "2"
+                      amount: "998"
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+          description: 成功
+      summary: 查询用户NFT
+      tags:
+      - 扩展接入/低耦合交互
+      x-apifox-folder: 扩展接入/低耦合交互
+      x-apifox-status: released
+  /TransferNFT:
+    post:
+      deprecated: false
+      description: 转移指定ID的NFT，指定数量Amount，至指定用户区块链地址
+      parameters: []
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_1'
+        content:
+          application/json:
+            schema:
+              properties:
+                appid:
+                  description: 交互APPID
+                  type: string
+                to:
+                  description: 目的地址
+                  type: string
+                id:
+                  description: NFT的ID
+                  type: string
+                amount:
+                  description: 转移的数量
+                  type: string
+              required:
+              - amount
+              - appid
+              - id
+              - to
+              type: object
+              x-apifox-orders:
+              - appid
+              - to
+              - id
+              - amount
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                "1":
+                  summary: 成功示例
+                  value:
+                    state: "1"
+                    hash: 0xbc82129a022d4cfe1c373d812c30a044d4b49a253440da0f85d59764aa8c1e49
+                    contract: cfxtest:acbk50byfusjyh7494rm8yd8xhnkdh9jyetgadzem4
+                    form: cfxtest:aar3g70v613nnkknsewa5902p0bxb6jcay1n4dgnxp
+                    to: cfxtest:aas8ns7stkh3fz47rntcw0n2juaxws7arjc4wu114j
+                    id: "2"
+                    amount: "1"
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+          description: 成功
+      summary: 转移NFT
+      tags:
+      - 扩展接入/低耦合交互
+      x-apifox-folder: 扩展接入/低耦合交互
+      x-apifox-status: released
+  /Jugugu_GetPhoneCode:
+    post:
+      deprecated: false
+      description: 获取登录短信验证码，验证码重复发送周期为60秒。验证码有效时间为3分钟
+      parameters: []
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_2'
+        content:
+          application/json:
+            schema:
+              properties:
+                phone:
+                  description: 手机号
+                  type: string
+                robotcodeid:
+                  description: 图片验证码ID
+                  type: string
+                robotcode:
+                  description: 图片验证码识别结果
+                  type: string
+              required:
+              - phone
+              - robotcode
+              - robotcodeid
+              type: object
+              x-apifox-orders:
+              - phone
+              - robotcodeid
+              - robotcode
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                "1":
+                  summary: 成功示例
+                  value:
+                    state: "0"
+                    msg: 短信验证码已发送
+                    phone: ""
+                    virifycodeid: ""
+                    virifyimage: ""
+                    confluxaddress: ""
+                    ethaddress: ""
+                    token: ""
+                    cookietoken: ""
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+          description: 成功
+      summary: 2.获取登录短信验证码
+      tags:
+      - 扩展接入/常规交互
+      x-apifox-folder: 扩展接入/常规交互
+      x-apifox-status: released
+  /Jugugug_GetReleaseNFT1155_PNGCode:
+    post:
+      deprecated: false
+      description: 获取验证码图片，用于防止机器人。
+      parameters: []
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_3'
+        content:
+          application/json:
+            schema:
+              properties:
+                phone:
+                  description: 该函数传“”空字符串
+                  title: 国内手机号
+                  type: string
+              required:
+              - phone
+              type: object
+              x-apifox-orders:
+              - phone
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                "1":
+                  summary: 成功示例
+                  value:
+                    state: "0"
+                    msg: ""
+                    virifycodeid: rrXuUJStqXYVrG9OngFq
+                    virifyimage: data:image/png;base64,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
+                "2":
+                  summary: 成功示例
+                  value:
+                    state: "0"
+                    msg: ""
+                    virifycodeid: rrXuUJStqXYVrG9OngFq
+                    virifyimage: data:image/png;base64,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
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+          description: 成功
+      summary: 1.获得验证码图片
+      tags:
+      - 扩展接入/常规交互
+      x-apifox-folder: 扩展接入/常规交互
+      x-apifox-status: released
+  /FriendLogin:
+    post:
+      deprecated: false
+      description: Cookie无感登录jugugu获取用户信息。使用CookieToken和手机号登录菊咕咕获取信息，安全考虑该方法不会获得操作等级高的token。cookietoken只有有限的操作权限。
+      parameters: []
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_4'
+        content:
+          application/json:
+            schema:
+              properties:
+                phone:
+                  description: 国内手机号
+                  title: 手机号
+                  type: string
+                code:
+                  title: 短信验证码
+                  type: string
+                robotcode:
+                  title: 图片验证码ID
+                  type: string
+                robotcodeid:
+                  title: 图片验证码识别结果
+                  type: string
+              required:
+              - code
+              - phone
+              - robotcode
+              - robotcodeid
+              type: object
+              x-apifox-orders:
+              - phone
+              - code
+              - robotcode
+              - robotcodeid
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                "1":
+                  summary: 成功示例
+                  value:
+                    state: "1"
+                    msg: ""
+                    phone: "17512345634"
+                    virifycodeid: ""
+                    virifyimage: ""
+                    confluxaddress: cfxtest:aamks43nmdwaeztba104jv5vyywp5wktgp07wscfu3
+                    ethaddress: 0xB4976B2b50e40255e105EdA44771A524CDc92f33
+                    token: ""
+                    cookietoken: ""
+                "2":
+                  summary: 成功示例
+                  value:
+                    state: "1"
+                    msg: ""
+                    phone: "17512345634"
+                    virifycodeid: ""
+                    virifyimage: ""
+                    confluxaddress: cfxtest:aamks43nmdwaeztba104jv2vyywp5wktgp07wscfu3
+                    ethaddress: 0xB4976B2b50e40255e105EdA44771A324CDc92f33
+                    token: ""
+                    cookietoken: ""
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+          description: 成功
+      summary: 4.Cookie登录
+      tags:
+      - 扩展接入/常规交互
+      x-apifox-folder: 扩展接入/常规交互
+      x-apifox-status: released
+components:
+  requestBodies:
+    inline_object_1:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_1'
+    inline_object:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object'
+    inline_object_4:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_4'
+    inline_object_3:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_3'
+    inline_object_2:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_2'
+  schemas:
+    inline_object:
+      properties:
+        account:
+          title: 用户区块链地址
+          type: string
+        contract:
+          title: 智能合约区块链地址（这里传小红花的地址）
+          type: string
+      required:
+      - account
+      - contract
+      type: object
+      x-apifox-orders:
+      - account
+      - contract
+    inline_response_200_nfts:
+      example:
+        amount: amount
+        id: id
+      properties:
+        id:
+          description: NFT的id
+          type: string
+        amount:
+          description: NFT的数量
+          type: string
+    inline_response_200:
+      example:
+        nfts:
+        - amount: amount
+          id: id
+        - amount: amount
+          id: id
+        contract: contract
+        account: account
+      properties:
+        contract:
+          title: 合约地址
+          type: string
+        account:
+          title: 用户区块链地址
+          type: string
+        nfts:
+          description: 用户持有的查询合约的所有NFT
+          items:
+            $ref: '#/components/schemas/inline_response_200_nfts'
+          title: NFT数组
+          type: array
+      required:
+      - account
+      - contract
+      - nfts
+    inline_object_1:
+      properties:
+        appid:
+          description: 交互APPID
+          type: string
+        to:
+          description: 目的地址
+          type: string
+        id:
+          description: NFT的ID
+          type: string
+        amount:
+          description: 转移的数量
+          type: string
+      required:
+      - amount
+      - appid
+      - id
+      - to
+      type: object
+      x-apifox-orders:
+      - appid
+      - to
+      - id
+      - amount
+    inline_response_200_1:
+      example:
+        amount: amount
+        form: form
+        contract: contract
+        state: state
+        to: to
+        id: id
+        hash: hash
+      properties:
+        state:
+          description: 0代表失败  1代表成功
+          title: 请求状态
+          type: string
+        hash:
+          description: state=0时为错误信息，state=1时交易hash
+          type: string
+        contract:
+          description: 合约地址
+          type: string
+        form:
+          description: 源地址
+          type: string
+        to:
+          description: 目的地址
+          type: string
+        id:
+          description: NFT的ID
+          type: string
+        amount:
+          description: 转移的数量
+          type: string
+      required:
+      - amount
+      - contract
+      - form
+      - hash
+      - id
+      - state
+      - to
+    inline_object_2:
+      properties:
+        phone:
+          description: 手机号
+          type: string
+        robotcodeid:
+          description: 图片验证码ID
+          type: string
+        robotcode:
+          description: 图片验证码识别结果
+          type: string
+      required:
+      - phone
+      - robotcode
+      - robotcodeid
+      type: object
+      x-apifox-orders:
+      - phone
+      - robotcodeid
+      - robotcode
+    inline_response_200_2:
+      example:
+        msg: msg
+        virifyimage: virifyimage
+        cookietoken: cookietoken
+        phone: phone
+        ethaddress: ethaddress
+        confluxaddress: confluxaddress
+        state: state
+        virifycodeid: virifycodeid
+        token: token
+      properties:
+        state:
+          description: -1代表错误 1代表成功 0代表提示
+          title: 状态码
+          type: string
+        msg:
+          description: 状态码对应的详细信息
+          type: string
+        phone:
+          description: 手机号
+          type: string
+        virifycodeid:
+          description: 验证码图片ID
+          type: string
+        virifyimage:
+          description: 验证码图片数据data:image/png;base64,格式
+          type: string
+        confluxaddress:
+          description: 树图区块链地址
+          type: string
+        ethaddress:
+          description: 以太坊及其侧链地址
+          type: string
+        token:
+          description: 登录成功后获得的令牌，用于jugugu其他各类操作
+          type: string
+        cookietoken:
+          description: cookie无感登录的令牌
+          type: string
+      required:
+      - confluxaddress
+      - cookietoken
+      - ethaddress
+      - msg
+      - phone
+      - state
+      - token
+      - virifycodeid
+      - virifyimage
+    inline_object_3:
+      properties:
+        phone:
+          description: 该函数传“”空字符串
+          title: 国内手机号
+          type: string
+      required:
+      - phone
+      type: object
+      x-apifox-orders:
+      - phone
+    inline_response_200_3:
+      example:
+        msg: msg
+        virifyimage: virifyimage
+        state: state
+        virifycodeid: virifycodeid
+      properties:
+        state:
+          description: -1代表错误 1代表成功 0代表提示
+          title: 状态码
+          type: string
+        msg:
+          description: 状态码对应的详细信息
+          type: string
+        virifycodeid:
+          description: 验证码图片ID
+          type: string
+        virifyimage:
+          description: 验证码图片数据data:image/png;base64,格式
+          type: string
+      required:
+      - msg
+      - state
+      - virifycodeid
+      - virifyimage
+    inline_object_4:
+      properties:
+        phone:
+          description: 国内手机号
+          title: 手机号
+          type: string
+        code:
+          title: 短信验证码
+          type: string
+        robotcode:
+          title: 图片验证码ID
+          type: string
+        robotcodeid:
+          title: 图片验证码识别结果
+          type: string
+      required:
+      - code
+      - phone
+      - robotcode
+      - robotcodeid
+      type: object
+      x-apifox-orders:
+      - phone
+      - code
+      - robotcode
+      - robotcodeid
